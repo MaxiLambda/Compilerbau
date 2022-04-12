@@ -2,6 +2,8 @@ import expresions.*;
 import expresions.binaryoperators.MinusExpression;
 import expresions.binaryoperators.PlusExpression;
 
+import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Map.entry;
@@ -16,7 +18,12 @@ public class Interpreter {
 
         Expression expression2 = new PlusExpression(new Identifier("test",localContext),new Identifier("test") ,globalContext);
 
-        System.out.println("exp: " + expression.eval());
-        System.out.println("exp2: " + expression2.eval());
+        Expression expression3 = new PlusExpression(new Identifier("test"),new ReAssign(new Identifier("test"),"test",new Literal(3d)) ,globalContext);
+        Expression expression4 = new PlusExpression(new Identifier("test"),new Identifier("test"),globalContext);
+
+        System.out.println("exp: " + expression.eval());//test + test = 5 + 5 = 8
+        System.out.println("exp2: " + expression2.eval());//test + (local-test = 4; local-test) = 5 + 4 = 9
+        System.out.println("exp3: " + expression3.eval());//test + (test = 3; test) = 5 + 3 = 8
+        System.out.println("exp4: " + expression4.eval());//test + test = 3 + 3 = 6
     }
 }
