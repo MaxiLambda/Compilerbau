@@ -2,12 +2,12 @@ package expresions;
 
 import java.util.Map;
 
-public class ReAssign extends Expression{
+public class Assign extends Expression{
 
     private final Expression expression;
     private final Map.Entry<String,Literal> newVar;
 
-    public ReAssign(Expression expression, String identifier, Literal value) {
+    public Assign(Expression expression, String identifier, Literal value){
         super(new Context());
         newVar = Map.entry(identifier,value);
         this.expression = expression;
@@ -15,7 +15,8 @@ public class ReAssign extends Expression{
 
     @Override
     public double eval(Context higherContext) {
-        higherContext.setVar(newVar);
-        return expression.eval(higherContext);
+        context.merge(higherContext);
+        context.addVar(newVar);
+        return expression.eval(context);
     }
 }
