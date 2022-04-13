@@ -15,8 +15,7 @@ public class Assign extends Expression{
 
     @Override
     public double eval(Context higherContext) {
-        context.merge(higherContext);
-        context.addVar(newVar);
+        context.merge(higherContext).addVar(newVar);
         return expression.eval(context);
     }
 }

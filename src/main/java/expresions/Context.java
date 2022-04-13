@@ -36,8 +36,9 @@ public class Context{
             if (vars.containsKey(updateIdentifier.getKey())) {
                 vars.put(updateIdentifier.getKey(), updateIdentifier.getValue());
             } else if (higherContext.isPresent()) {
-                if(higherContext.get().getVars().containsKey(updateIdentifier.getKey()))
-                    higherContext.get().getVars().put(updateIdentifier.getKey(), updateIdentifier.getValue());
+                Map<String, Literal> higherVars = higherContext.get().getVars();
+                if(higherVars.containsKey(updateIdentifier.getKey()))
+                    higherVars.put(updateIdentifier.getKey(), updateIdentifier.getValue());
             } else {
                 throw new IllegalArgumentException("Identifier %s cant be resigned, because it is not in the current scope.");
             }
@@ -45,9 +46,7 @@ public class Context{
 
     public void addVar(Map.Entry<String,Literal> newIdentifier){
         if(vars.containsKey(newIdentifier.getKey())) throw new RuntimeException("You cant assign an already assigned Variable");
-        System.out.println("added var");
         vars.put(newIdentifier.getKey(),newIdentifier.getValue());
-        System.out.println("bp");
     }
 
     private Map<String, Literal> getVars(){
