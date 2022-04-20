@@ -1,2 +1,2 @@
 # Compilerbau
-Repo fopr Compilerbau class
+Repo for Compilerbau class
