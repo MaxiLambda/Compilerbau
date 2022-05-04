@@ -1,6 +1,6 @@
 package com.thecout.lox.Parser;
 
-import com.thecout.lox.Token;
+import com.thecout.lox.Scanner.Token;
 
 public class ParserError {
     static void error(Token token, String message) {

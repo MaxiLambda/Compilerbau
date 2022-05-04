@@ -1,7 +1,7 @@
 
-import com.thecout.lox.Scanner;
-import com.thecout.lox.Token;
-import com.thecout.lox.TokenType;
+import com.thecout.lox.Scanner.Scanner;
+import com.thecout.lox.Scanner.Token;
+import com.thecout.lox.Scanner.TokenType;
 import org.junit.jupiter.api.Test;
 
 

@@ -2,9 +2,9 @@ import com.thecout.lox.Parser.Parser;
 import com.thecout.lox.Parser.Stmts.Function;
 import com.thecout.lox.Parser.Stmts.Print;
 import com.thecout.lox.Parser.Stmts.Stmt;
-import com.thecout.lox.Scanner;
-import com.thecout.lox.Token;
-import com.thecout.lox.TokenType;
+import com.thecout.lox.Scanner.Scanner;
+import com.thecout.lox.Scanner.Token;
+import com.thecout.lox.Scanner.TokenType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

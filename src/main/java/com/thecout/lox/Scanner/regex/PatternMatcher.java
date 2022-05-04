@@ -1,7 +1,7 @@
-package com.thecout.lox.regex;
+package com.thecout.lox.Scanner.regex;
 
-import com.thecout.lox.Token;
-import com.thecout.lox.TokenType;
+import com.thecout.lox.Scanner.Token;
+import com.thecout.lox.Scanner.TokenType;
 import com.thecout.lox.util.Triplet;
 
 import java.util.Optional;

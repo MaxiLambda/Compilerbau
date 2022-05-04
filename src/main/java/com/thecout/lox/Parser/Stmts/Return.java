@@ -1,7 +1,7 @@
 package com.thecout.lox.Parser.Stmts;
 
 import com.thecout.lox.Parser.Expr.Expr;
-import com.thecout.lox.Token;
+import com.thecout.lox.Scanner.Token;
 
 public class Return extends Stmt {
     public Return(Token keyword, Expr value) {

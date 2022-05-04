@@ -1,7 +1,7 @@
 package com.thecout.lox.Parser.Stmts;
 
 
-import com.thecout.lox.Token;
+import com.thecout.lox.Scanner.Token;
 
 import java.util.List;
 import java.util.stream.Collectors;

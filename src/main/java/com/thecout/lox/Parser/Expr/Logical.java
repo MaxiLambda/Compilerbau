@@ -1,6 +1,6 @@
 package com.thecout.lox.Parser.Expr;
 
-import com.thecout.lox.Token;
+import com.thecout.lox.Scanner.Token;
 
 public class Logical extends Expr {
     public Logical(Expr left, Token operator, Expr right) {

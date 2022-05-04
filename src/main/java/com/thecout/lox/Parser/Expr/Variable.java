@@ -1,6 +1,6 @@
 package com.thecout.lox.Parser.Expr;
 
-import com.thecout.lox.Token;
+import com.thecout.lox.Scanner.Token;
 
 public class Variable extends Expr {
     public Variable(Token name) {

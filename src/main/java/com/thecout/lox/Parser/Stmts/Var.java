@@ -1,8 +1,7 @@
 package com.thecout.lox.Parser.Stmts;
 
 import com.thecout.lox.Parser.Expr.Expr;
-import com.thecout.lox.Token;
-import com.thecout.lox.Token;
+import com.thecout.lox.Scanner.Token;
 
 public class Var extends Stmt {
     public Var(Token name, Expr initializer) {

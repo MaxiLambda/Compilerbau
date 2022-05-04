@@ -7,13 +7,13 @@ import com.thecout.lox.Parser.Stmts.Block;
 import com.thecout.lox.Parser.Stmts.Function;
 import com.thecout.lox.Parser.Stmts.If;
 import com.thecout.lox.Parser.Stmts.Stmt;
-import com.thecout.lox.Token;
-import com.thecout.lox.TokenType;
+import com.thecout.lox.Scanner.Token;
+import com.thecout.lox.Scanner.TokenType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.thecout.lox.TokenType.*;
+import static com.thecout.lox.Scanner.TokenType.*;
 
 public class Parser {
     private static class ParseError extends RuntimeException {

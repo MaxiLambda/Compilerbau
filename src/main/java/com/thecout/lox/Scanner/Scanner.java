@@ -1,14 +1,14 @@
-package com.thecout.lox;
+package com.thecout.lox.Scanner;
 
 
-import com.thecout.lox.regex.TokenManager;
+import com.thecout.lox.Scanner.regex.TokenManager;
 import com.thecout.lox.util.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.thecout.lox.TokenType.EOF;
+import static com.thecout.lox.Scanner.TokenType.EOF;
 
 public class Scanner {
 
