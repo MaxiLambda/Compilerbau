@@ -15,7 +15,14 @@ public enum FirstTokens {
 
     PRIMARY(TRUE, FALSE, NIL, NUMBER, STRING, IDENTIFIER, LEFT_PAREN, SUPER),
     CALL(List.of(PRIMARY.tokenTypes)),
-    UNARY(BANG,MINUS);
+    UNARY(BANG,MINUS),
+
+    VAR_DECL(VAR),
+    FUN_DECL(FUN),
+    ASSIGNMENT(IDENTIFIER),
+    EXPR(List.of(ASSIGNMENT.tokenTypes)),
+    EXPR_STATEMENT(List.of(EXPR.tokenTypes)),
+    STATEMENT(IDENTIFIER,FUN,FUN,FOR,IF,WHILE,PRINT,RETURN,LEFT_BRACE),;
 
     private final List<TokenType> tokenTypes;
 

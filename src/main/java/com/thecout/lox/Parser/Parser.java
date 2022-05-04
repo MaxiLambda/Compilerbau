@@ -82,11 +82,18 @@ public class Parser {
     }
 
     private Stmt printStatement() {
-        return null;
+        Expr expr = expression();
+        consume(SEMICOLON,"Expected ';'");
+        return new Print(expr);
     }
 
     private Stmt returnStatement() {
-        return null;
+        Expr expr = new Literal(null);
+        if(FirstTokens.EXPR.containsTokenType(peek().type)){
+            expr = expression();
+        }
+        consume(SEMICOLON,"Expected ';'");
+        return new Return(expr);
     }
 
     private Stmt varDeclaration() {
@@ -94,15 +101,29 @@ public class Parser {
     }
 
     private Stmt whileStatement() {
-        return null;
+        consume(LEFT_PAREN,"Expected '('");
+        Expr expr = expression();
+        consume(RIGHT_PAREN, "Expect ')'");
+        return new While(expr, statement());
     }
 
     private Stmt expressionStatement() {
-        return null;
+        Expr expr = expression();
+        consume(SEMICOLON,"Expected ';'");
+        return new Expression(expr);
     }
 
     private Function function() {
-        return null;
+        Token name = consume(IDENTIFIER,"Expected identifier");
+        consume(LEFT_PAREN,"Expected '('");
+        List<Token> parameters = new ArrayList<>();
+        while (!peekMatch(RIGHT_PAREN)){
+            parameters.add(consume(IDENTIFIER,"Expected identifier"));
+            if(!match(COMMA)) break;
+        }
+        consume(RIGHT_PAREN, "Expect ')'");
+        consume(LEFT_BRACE,"Expected '{'");
+        return new Function(name, parameters, block());
     }
 
     private List<Stmt> block() {
@@ -194,20 +215,13 @@ public class Parser {
     private Expr call() {
         Expr expr = primary();
         List<Expr> arguments = new ArrayList<>();
-        while(peekMatch(LEFT_PAREN, DOT)){
-            if(match(LEFT_PAREN)){
-//                arguments.add(arguments());
-                consume(RIGHT_PAREN,"Expected ')' after arguments");
-            }else if(match(DOT)){
-                //arguments.add(new Variable(consume(IDENTIFIER))
-            }
+        consume(LEFT_PAREN,"Expected '('");
+        while (!peekMatch(RIGHT_PAREN)){
+            arguments.add(expression());
+            if(!match(COMMA)) break;
         }
-
-        // new Call(expr, )
-
-        return expr;
-        //throw new ParseError();
-        //return null;
+        consume(RIGHT_PAREN,"Expected ')'");
+        return new Call(expr,arguments);
     }
 
 //    private Expr arguments() {
@@ -226,12 +240,14 @@ public class Parser {
         if(match(TRUE)) return new Literal(true);
         if(match(FALSE)) return new Literal(true);
         if(match(NIL)) return new Literal(null);
-        //match "this"
-        //if(match(VAR)) return new Variable();
         if(check(NUMBER)) return new Literal(consume(NUMBER,"Expected Number").literal);
         if(check(STRING)) return new Literal(consume(STRING,"Expected String").literal);
         if(check(IDENTIFIER)) return new Variable(consume(IDENTIFIER, "Expected Identifier"));
-        //if(match(LEFT_PAREN)) return new Grouping()
+        if(match(LEFT_PAREN)){
+            Expr expr = expression();
+            consume(RIGHT_PAREN,"Expected ')'");
+            return expr;
+        }
 
         throw new ParseError();
     }
