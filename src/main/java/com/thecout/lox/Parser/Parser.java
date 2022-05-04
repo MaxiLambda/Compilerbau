@@ -26,26 +26,25 @@ public class Parser {
 
     public List<Stmt> parse() {
         List<Stmt> statements = new ArrayList<>();
-        while (!isAtEnd()) {
-            statements.add(declaration());
+        try {
+            while (!isAtEnd()) {
+                statements.add(declaration());
+            }
+            return statements;
+        } catch (ParseError error) {
+            throw new RuntimeException(error);
         }
-
-        return statements;
     }
 
     private Expr expression() {
+
         return assignment();
     }
 
     private Stmt declaration() {
-        try {
-            if (match(FUN)) return function();
-            if (match(VAR)) return varDeclaration();
-
-            return statement();
-        } catch (ParseError error) {
-            return null;
-        }
+        if (match(FUN)) return function();
+        if (match(VAR)) return varDeclaration();
+        return statement();
     }
 
     private Stmt statement() {
