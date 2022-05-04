@@ -1,7 +1,5 @@
 package com.thecout.lox.Parser.first;
 
-import com.thecout.lox.Parser.Expr.Expr;
-import com.thecout.lox.Scanner.Token;
 import com.thecout.lox.Scanner.TokenType;
 
 import java.util.Collection;
@@ -13,7 +11,7 @@ import static com.thecout.lox.Scanner.TokenType.*;
 
 public enum FirstTokens {
 
-    PRIMARY(TRUE, FALSE, NIL, NUMBER, STRING, IDENTIFIER, LEFT_PAREN, SUPER),
+    PRIMARY(TRUE, FALSE, NIL, NUMBER, STRING, IDENTIFIER, LEFT_PAREN),
     CALL(List.of(PRIMARY.tokenTypes)),
     UNARY(BANG,MINUS),
 

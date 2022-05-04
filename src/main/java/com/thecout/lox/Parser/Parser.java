@@ -2,10 +2,7 @@ package com.thecout.lox.Parser;
 
 
 import com.thecout.lox.Parser.Expr.*;
-import com.thecout.lox.Parser.Stmts.Block;
-import com.thecout.lox.Parser.Stmts.Function;
-import com.thecout.lox.Parser.Stmts.If;
-import com.thecout.lox.Parser.Stmts.Stmt;
+import com.thecout.lox.Parser.Stmts.*;
 import com.thecout.lox.Parser.first.FirstTokens;
 import com.thecout.lox.Scanner.Token;
 import com.thecout.lox.Scanner.TokenType;
@@ -63,13 +60,37 @@ public class Parser {
     }
 
     private Stmt forStatement() {
+        consume(LEFT_PAREN,"Expected '('");
+        List<Stmt> returnStmts = new ArrayList<>();
+        if(FirstTokens.VAR_DECL.containsTokenType(peek().type)){
+            returnStmts.add(varDeclaration());
+        }else if(FirstTokens.EXPR_STATEMENT.containsTokenType(peek().type)){
+            returnStmts.add(expressionStatement());
+        }else{
+            consume(SEMICOLON,"Expected ';'");
+        }
+        Expr condition = null;
+        if(FirstTokens.EXPR.containsTokenType(peek().type)){
+            condition = expression();
+        }
+        consume(SEMICOLON,"Expected ';'");
+        Expr mutator = null;
+        if(FirstTokens.EXPR.containsTokenType(peek().type)){
+            mutator = expression();
+        }
 
-        return null;
+        condition = condition == null ? new Literal(true) : condition;
+        consume(RIGHT_PAREN, "Expect ')'");
+        Stmt blockStmt = new Block(List.of(statement(),new Expression(mutator)));
+        Stmt whileStmt = new While(condition, blockStmt);
+        returnStmts.add(whileStmt);
+        return new Block(returnStmts);
     }
 
     private Stmt ifStatement() {
         consume(LEFT_PAREN, "Expect '(' after 'if'.");
         Expr condition = expression();
+
         consume(RIGHT_PAREN, "Expect ')' after if condition."); // [parens]
 
         Stmt thenBranch = statement();
@@ -97,7 +118,13 @@ public class Parser {
     }
 
     private Stmt varDeclaration() {
-        return null;
+        Token name = consume(IDENTIFIER,"Expected identifier");
+        Expr expr = new Literal(null);
+        if(match(EQUAL)){
+            expr = expression();
+        }
+        consume(SEMICOLON,"Expected ';'");
+        return new Var(name, expr);
     }
 
     private Stmt whileStatement() {
@@ -127,11 +154,24 @@ public class Parser {
     }
 
     private List<Stmt> block() {
-        return null;
+        List<Stmt> body = new ArrayList<>();
+        while(FirstTokens.STATEMENT.containsTokenType(peek().type)){
+            body.add(declaration());
+        }
+        consume(RIGHT_BRACE,"Expected '}'");
+        return body;
     }
 
     private Expr assignment() {
-        return null;
+        Token name = consume(IDENTIFIER,"Expected identifier");
+        consume(EQUAL,"Expected '='");
+        Expr expr;
+        if(FirstTokens.ASSIGNMENT.containsTokenType(peek().type)){
+            expr = assignment();
+        }else{
+            expr = or();
+        }
+        return new Assign(name, expr);
     }
 
     private Expr or() {
@@ -207,11 +247,6 @@ public class Parser {
         throw error(previous(),"Expected 'unary operator'");
     }
 
-    private Expr finishCall(Expr callee) {
-        return null;
-    }
-
-
     private Expr call() {
         Expr expr = primary();
         List<Expr> arguments = new ArrayList<>();
@@ -223,17 +258,6 @@ public class Parser {
         consume(RIGHT_PAREN,"Expected ')'");
         return new Call(expr,arguments);
     }
-
-//    private Expr arguments() {
-//        Expr expr = expression();
-//        while(match(COMMA)){
-//            Token operator = previous();
-//            Expr right = expression();
-//            expr = new LList(expr, right);
-//        }
-//        return expr;
-//    }
-
 
     private Expr primary() {
 

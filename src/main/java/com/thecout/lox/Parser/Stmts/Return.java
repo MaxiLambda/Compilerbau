@@ -4,7 +4,7 @@ import com.thecout.lox.Parser.Expr.Expr;
 import com.thecout.lox.Scanner.Token;
 
 public class Return extends Stmt {
-    public Return( Expr value) {
+    public Return(Expr value) {
         this.value = value;
     }
 
