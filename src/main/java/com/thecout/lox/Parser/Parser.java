@@ -2,16 +2,19 @@ package com.thecout.lox.Parser;
 
 
 import com.thecout.lox.Parser.Expr.*;
-import com.thecout.lox.Parser.Stmts.*;
+import com.thecout.lox.Parser.Stmts.Block;
+import com.thecout.lox.Parser.Stmts.Function;
+import com.thecout.lox.Parser.Stmts.If;
+import com.thecout.lox.Parser.Stmts.Stmt;
 import com.thecout.lox.Parser.first.FirstTokens;
 import com.thecout.lox.Scanner.Token;
 import com.thecout.lox.Scanner.TokenType;
 
-import java.util.*;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.thecout.lox.Scanner.TokenType.*;
+
 
 public class Parser {
     private static class ParseError extends RuntimeException {
@@ -39,7 +42,7 @@ public class Parser {
 
     private Stmt declaration() {
         try {
-            if (match(FUN)) return function("function");
+            if (match(FUN)) return function();
             if (match(VAR)) return varDeclaration();
 
             return statement();
@@ -79,9 +82,7 @@ public class Parser {
     }
 
     private Stmt printStatement() {
-        Expr expr = expression();
-        consume(SEMICOLON,"Expect ';' after expression");
-        return new Print(expr);
+        return null;
     }
 
     private Stmt returnStatement() {
@@ -100,7 +101,7 @@ public class Parser {
         return null;
     }
 
-    private Function function(String kind) {
+    private Function function() {
         return null;
     }
 
@@ -109,19 +110,6 @@ public class Parser {
     }
 
     private Expr assignment() {
-        //if (match(PRIMAORY)) return forStatement();
-
-        //????
-//        if (match(FOR)) return forStatement();
-//        if (match(IF)) return ifStatement();
-//
-//        //(call ".")? IDENTIFIER "=" assignment | logic_or
-          //logic_and (or logic_and)
-//        if(match())
-//        // ;
-        consume(IDENTIFIER,"Expect ';' after expression");
-        consume(EQUAL,"Expect '=' after identifier");
-
         return null;
     }
 
@@ -208,29 +196,29 @@ public class Parser {
         List<Expr> arguments = new ArrayList<>();
         while(peekMatch(LEFT_PAREN, DOT)){
             if(match(LEFT_PAREN)){
-                arguments.add(arguments());
+//                arguments.add(arguments());
                 consume(RIGHT_PAREN,"Expected ')' after arguments");
             }else if(match(DOT)){
                 //arguments.add(new Variable(consume(IDENTIFIER))
             }
         }
 
-       // new Call(expr, )
+        // new Call(expr, )
 
         return expr;
         //throw new ParseError();
         //return null;
     }
 
-    private Expr arguments() {
-        Expr expr = expression();
-        while(match(COMMA)){
-            Token operator = previous();
-            Expr right = expression();
-            expr = new LList(expr, right);
-        }
-        return expr;
-    }
+//    private Expr arguments() {
+//        Expr expr = expression();
+//        while(match(COMMA)){
+//            Token operator = previous();
+//            Expr right = expression();
+//            expr = new LList(expr, right);
+//        }
+//        return expr;
+//    }
 
 
     private Expr primary() {
@@ -248,6 +236,16 @@ public class Parser {
         throw new ParseError();
     }
 
+    private boolean peekMatch(TokenType... types) {
+        for (TokenType type : types) {
+            if (check(type)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private boolean match(TokenType... types) {
         for (TokenType type : types) {
             if (check(type)) {
@@ -256,15 +254,6 @@ public class Parser {
             }
         }
 
-        return false;
-    }
-
-    private boolean peekMatch(TokenType... types) {
-        for (TokenType type : types) {
-            if (check(type)) {
-                return true;
-            }
-        }
         return false;
     }
 
