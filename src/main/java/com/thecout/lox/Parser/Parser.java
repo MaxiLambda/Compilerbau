@@ -1,17 +1,15 @@
 package com.thecout.lox.Parser;
 
 
-import com.thecout.lox.Parser.Expr.Expr;
-import com.thecout.lox.Parser.Expr.Logical;
-import com.thecout.lox.Parser.Stmts.Block;
-import com.thecout.lox.Parser.Stmts.Function;
-import com.thecout.lox.Parser.Stmts.If;
-import com.thecout.lox.Parser.Stmts.Stmt;
+import com.thecout.lox.Parser.Expr.*;
+import com.thecout.lox.Parser.Stmts.*;
+import com.thecout.lox.Parser.first.FirstTokens;
 import com.thecout.lox.Scanner.Token;
 import com.thecout.lox.Scanner.TokenType;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static com.thecout.lox.Scanner.TokenType.*;
 
@@ -81,7 +79,9 @@ public class Parser {
     }
 
     private Stmt printStatement() {
-        return null;
+        Expr expr = expression();
+        consume(SEMICOLON,"Expect ';' after expression");
+        return new Print(expr);
     }
 
     private Stmt returnStatement() {
@@ -125,7 +125,13 @@ public class Parser {
     }
 
     private Expr and() {
-        return null;
+        Expr expr = equality();
+        while(match(AND)){
+            Token operator = previous();
+            Expr right = equality();
+            expr = new Logical(expr, operator, right);
+        }
+        return expr;
     }
 
     private Expr equality() {
@@ -152,6 +158,7 @@ public class Parser {
         return null;
     }
 
+
     private Expr call() {
         return null;
     }
@@ -168,6 +175,15 @@ public class Parser {
             }
         }
 
+        return false;
+    }
+
+    private boolean peekMatch(TokenType... types) {
+        for (TokenType type : types) {
+            if (check(type)) {
+                return true;
+            }
+        }
         return false;
     }
 

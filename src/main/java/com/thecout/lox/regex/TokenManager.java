@@ -1,4 +1,4 @@
-package com.thecout.lox.Scanner.regex;
+package com.thecout.lox.regex;
 
 import com.thecout.lox.Scanner.Token;
 import com.thecout.lox.Scanner.TokenType;

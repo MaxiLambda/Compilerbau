@@ -1,7 +1,7 @@
 package com.thecout.lox.Scanner;
 
 
-import com.thecout.lox.Scanner.regex.TokenManager;
+import com.thecout.lox.regex.TokenManager;
 import com.thecout.lox.util.Tuple;
 
 import java.util.ArrayList;
