@@ -22,6 +22,7 @@ public enum FirstTokens {
     EXPR_STATEMENT(List.of(EXPR.tokenTypes)),
     STATEMENT(IDENTIFIER,FUN,FUN,FOR,IF,WHILE,PRINT,RETURN,LEFT_BRACE),;
 
+
     private final List<TokenType> tokenTypes;
 
     FirstTokens(TokenType... tokenTypes){

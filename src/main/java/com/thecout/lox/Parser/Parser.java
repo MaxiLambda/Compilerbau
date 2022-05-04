@@ -163,15 +163,14 @@ public class Parser {
     }
 
     private Expr assignment() {
-        Token name = consume(IDENTIFIER,"Expected identifier");
-        consume(EQUAL,"Expected '='");
-        Expr expr;
-        if(FirstTokens.ASSIGNMENT.containsTokenType(peek().type)){
-            expr = assignment();
-        }else{
-            expr = or();
+        if(check(IDENTIFIER)){
+            Token identifier = consume(IDENTIFIER, "Expected identifier");
+            if(match(EQUAL)){
+                return new Assign(identifier, assignment());
+            }
+            goBack();
         }
-        return new Assign(name, expr);
+        return or();
     }
 
     private Expr or() {
@@ -243,6 +242,8 @@ public class Parser {
                 return new Unary(operator, call());
             }
             return new Unary(operator, unary());
+        }else if(FirstTokens.CALL.containsTokenType(peek().type)){
+            return primary();
         }
         throw error(previous(),"Expected 'unary operator'");
     }
@@ -311,6 +312,12 @@ public class Parser {
     private Token advance() {
         if (!isAtEnd()) current++;
         return previous();
+    }
+
+    private void goBack(){
+        if(current == 0) throw new Error();
+
+        current--;
     }
 
     private boolean isAtEnd() {
