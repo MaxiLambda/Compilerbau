@@ -109,6 +109,19 @@ public class Parser {
     }
 
     private Expr assignment() {
+        //if (match(PRIMAORY)) return forStatement();
+
+        //????
+//        if (match(FOR)) return forStatement();
+//        if (match(IF)) return ifStatement();
+//
+//        //(call ".")? IDENTIFIER "=" assignment | logic_or
+          //logic_and (or logic_and)
+//        if(match())
+//        // ;
+        consume(IDENTIFIER,"Expect ';' after expression");
+        consume(EQUAL,"Expect '=' after identifier");
+
         return null;
     }
 
@@ -135,23 +148,54 @@ public class Parser {
     }
 
     private Expr equality() {
-        return null;
+        Expr expr = comparison();
+        while(match(BANG_EQUAL, EQUAL_EQUAL)){
+            Token operator = previous();
+            Expr right = comparison();
+            expr = new Logical(expr, operator, right);
+        }
+        return expr;
     }
 
     private Expr comparison() {
-        return null;
+        Expr expr = addition();
+        while(match(GREATER, GREATER_EQUAL, LESS, LESS_EQUAL)){
+            Token operator = previous();
+            Expr right = addition();
+            expr = new Logical(expr, operator, right);
+        }
+        return expr;
     }
 
     private Expr addition() {
-        return null;
+        Expr expr = multiplication();
+        while(match(PLUS,MINUS)){
+            Token operator = previous();
+            Expr right = multiplication();
+            expr = new Binary(expr, operator, right);
+        }
+        return expr;
     }
 
     private Expr multiplication() {
-        return null;
+        Expr expr = unary();
+        while(match(STAR,SLASH)){
+            Token operator = previous();
+            Expr right = unary();
+            expr = new Binary(expr, operator, right);
+        }
+        return expr;
     }
 
     private Expr unary() {
-        return null;
+        if(match(BANG,MINUS)){
+            Token operator = previous();
+            if(FirstTokens.CALL.containsTokenType(operator.type)){
+                return new Unary(operator, call());
+            }
+            return new Unary(operator, unary());
+        }
+        throw error(previous(),"Expected 'unary operator'");
     }
 
     private Expr finishCall(Expr callee) {
@@ -160,11 +204,48 @@ public class Parser {
 
 
     private Expr call() {
-        return null;
+        Expr expr = primary();
+        List<Expr> arguments = new ArrayList<>();
+        while(peekMatch(LEFT_PAREN, DOT)){
+            if(match(LEFT_PAREN)){
+                arguments.add(arguments());
+                consume(RIGHT_PAREN,"Expected ')' after arguments");
+            }else if(match(DOT)){
+                //arguments.add(new Variable(consume(IDENTIFIER))
+            }
+        }
+
+       // new Call(expr, )
+
+        return expr;
+        //throw new ParseError();
+        //return null;
     }
 
+    private Expr arguments() {
+        Expr expr = expression();
+        while(match(COMMA)){
+            Token operator = previous();
+            Expr right = expression();
+            expr = new LList(expr, right);
+        }
+        return expr;
+    }
+
+
     private Expr primary() {
-        return null;
+
+        if(match(TRUE)) return new Literal(true);
+        if(match(FALSE)) return new Literal(true);
+        if(match(NIL)) return new Literal(null);
+        //match "this"
+        //if(match(VAR)) return new Variable();
+        if(check(NUMBER)) return new Literal(consume(NUMBER,"Expected Number").literal);
+        if(check(STRING)) return new Literal(consume(STRING,"Expected String").literal);
+        if(check(IDENTIFIER)) return new Variable(consume(IDENTIFIER, "Expected Identifier"));
+        //if(match(LEFT_PAREN)) return new Grouping()
+
+        throw new ParseError();
     }
 
     private boolean match(TokenType... types) {
