@@ -37,7 +37,6 @@ public class Parser {
     }
 
     private Expr expression() {
-
         return assignment();
     }
 
@@ -147,6 +146,7 @@ public class Parser {
             parameters.add(consume(IDENTIFIER,"Expected identifier"));
             if(!match(COMMA)) break;
         }
+
         consume(RIGHT_PAREN, "Expect ')'");
         consume(LEFT_BRACE,"Expected '{'");
         return new Function(name, parameters, block());
@@ -162,14 +162,17 @@ public class Parser {
     }
 
     private Expr assignment() {
-        if(check(IDENTIFIER)){
-            Token identifier = consume(IDENTIFIER, "Expected identifier");
-            if(match(EQUAL)){
-                return new Assign(identifier, assignment());
+        Token t = peek();
+        Expr expr = or();
+        if(t.type.equals(IDENTIFIER)){
+            if(check(EQUAL)){
+                if(match(EQUAL)){
+                    return new Assign(t, assignment());
+                }
             }
-            goBack();
         }
-        return or();
+
+        return expr;
     }
 
     private Expr or() {
@@ -250,12 +253,14 @@ public class Parser {
     private Expr call() {
         Expr expr = primary();
         List<Expr> arguments = new ArrayList<>();
-        consume(LEFT_PAREN,"Expected '('");
-        while (!peekMatch(RIGHT_PAREN)){
-            arguments.add(expression());
-            if(!match(COMMA)) break;
+        if(match(LEFT_PAREN)){
+            while (!peekMatch(RIGHT_PAREN)){
+                arguments.add(expression());
+                if(!match(COMMA)) break;
+            }
+            consume(RIGHT_PAREN,"Expected ')'");
         }
-        consume(RIGHT_PAREN,"Expected ')'");
+
         return new Call(expr,arguments);
     }
 
