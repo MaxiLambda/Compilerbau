@@ -4,7 +4,11 @@ import com.thecout.lox.Scanner.Token;
 import com.thecout.lox.Scanner.TokenType;
 import com.thecout.lox.util.Triplet;
 import com.thecout.lox.util.Tuple;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
 public class TokenManager {
 

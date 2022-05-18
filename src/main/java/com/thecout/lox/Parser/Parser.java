@@ -61,6 +61,7 @@ public class Parser {
         consume(LEFT_PAREN,"Expected '('");
         List<Stmt> returnStmts = new ArrayList<>();
         if(FirstTokens.VAR_DECL.containsTokenType(peek().type)){
+            consume(VAR,"Expected 'var'");
             returnStmts.add(varDeclaration());
         }else if(FirstTokens.EXPR_STATEMENT.containsTokenType(peek().type)){
             returnStmts.add(expressionStatement());
@@ -245,7 +246,7 @@ public class Parser {
             }
             return new Unary(operator, unary());
         }else if(FirstTokens.CALL.containsTokenType(peek().type)){
-            return primary();
+            return call();
         }
         throw error(previous(),"Expected 'unary operator'");
     }
@@ -259,15 +260,16 @@ public class Parser {
                 if(!match(COMMA)) break;
             }
             consume(RIGHT_PAREN,"Expected ')'");
+            return new Call(expr,arguments);
         }
+        return expr;
 
-        return new Call(expr,arguments);
     }
 
     private Expr primary() {
 
         if(match(TRUE)) return new Literal(true);
-        if(match(FALSE)) return new Literal(true);
+        if(match(FALSE)) return new Literal(false);
         if(match(NIL)) return new Literal(null);
         if(check(NUMBER)) return new Literal(consume(NUMBER,"Expected Number").literal);
         if(check(STRING)) return new Literal(consume(STRING,"Expected String").literal);

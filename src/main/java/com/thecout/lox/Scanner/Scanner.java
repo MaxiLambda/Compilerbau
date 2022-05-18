@@ -37,8 +37,8 @@ public class Scanner {
         }while (line.length() > 0);
 
 
-        returnToken.forEach(System.out::print);
-        System.out.println();
+        //returnToken.forEach(System.out::print);
+        //System.out.println();
 
         return returnToken;
     }
