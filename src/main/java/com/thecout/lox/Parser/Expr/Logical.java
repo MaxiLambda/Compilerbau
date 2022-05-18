@@ -10,12 +10,17 @@ public class Logical extends Expr {
     }
 
 
-    final Expr left;
-    final Token operator;
-    final Expr right;
+    public final Expr left;
+    public final Token operator;
+    public final Expr right;
 
     @Override
     public String print() {
         return "(%s %s %s)".formatted(operator.lexeme, left.print(), right.print());
+    }
+
+    @Override
+    public <R> R accept(ExprVisitor<R> exprVisitor) {
+        return null;
     }
 }

@@ -1,6 +1,5 @@
 package com.thecout.lox.Parser.Expr;
 
-
 import com.thecout.lox.Scanner.Token;
 
 public class Variable extends Expr {
@@ -14,5 +13,10 @@ public class Variable extends Expr {
     @Override
     public String print() {
         return name.lexeme;
+    }
+
+    @Override
+    public <R> R accept(ExprVisitor<R> exprVisitor) {
+        return null;
     }
 }

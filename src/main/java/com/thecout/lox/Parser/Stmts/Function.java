@@ -1,6 +1,5 @@
 package com.thecout.lox.Parser.Stmts;
 
-
 import com.thecout.lox.Scanner.Token;
 
 import java.util.List;
@@ -23,5 +22,10 @@ public class Function extends Stmt {
         String params = parameters.stream().map(t -> t.lexeme).collect(Collectors.joining(" "));
         String body = this.body.stream().map(Stmt::print).collect(Collectors.joining("\n"));
         return "(Function %s %s )".formatted(params, body);
+    }
+
+    @Override
+    public <R> R accept(StmtVisitor<R> stmtVisitor) {
+        return null;
     }
 }

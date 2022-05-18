@@ -9,11 +9,16 @@ public class Var extends Stmt {
         this.initializer = initializer;
     }
 
-    final Token name;
-    final Expr initializer;
+    public final Token name;
+    public final Expr initializer;
 
     @Override
     public String print() {
         return "(= %s %s)".formatted(name.lexeme, initializer.print());
+    }
+
+    @Override
+    public <R> R accept(StmtVisitor<R> stmtVisitor) {
+        return null;
     }
 }

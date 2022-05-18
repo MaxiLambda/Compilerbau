@@ -8,10 +8,15 @@ public class Block extends Stmt {
         this.statements = statements;
     }
 
-    final List<Stmt> statements;
+    public final List<Stmt> statements;
 
     @Override
     public String print() {
         return "(%s)".formatted(statements.stream().map(Stmt::print).collect(Collectors.joining("\n")));
+    }
+
+    @Override
+    public <R> R accept(StmtVisitor<R> stmtVisitor) {
+        return null;
     }
 }

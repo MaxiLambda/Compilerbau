@@ -9,11 +9,16 @@ public class While extends Stmt {
     }
 
 
-    final Expr condition;
-    final Stmt body;
+    public final Expr condition;
+    public final Stmt body;
 
     @Override
     public String print() {
         return "(while %s %s)".formatted(condition.print(), body.print());
+    }
+
+    @Override
+    public <R> R accept(StmtVisitor<R> stmtVisitor) {
+        return null;
     }
 }

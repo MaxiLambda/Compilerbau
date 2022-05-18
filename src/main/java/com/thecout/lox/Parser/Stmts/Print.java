@@ -8,10 +8,15 @@ public class Print extends Stmt {
     }
 
 
-    final Expr expression;
+    public final Expr expression;
 
     @Override
     public String print() {
         return "(print %s)".formatted(expression.print());
+    }
+
+    @Override
+    public <R> R accept(StmtVisitor<R> stmtVisitor) {
+        return null;
     }
 }

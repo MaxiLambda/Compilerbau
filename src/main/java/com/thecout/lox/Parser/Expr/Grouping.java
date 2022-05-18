@@ -6,10 +6,15 @@ public class Grouping extends Expr {
     }
 
 
-    final Expr expression;
+    public final Expr expression;
 
     @Override
     public String print() {
         return "(%s)".formatted(expression.print());
+    }
+
+    @Override
+    public <R> R accept(ExprVisitor<R> exprVisitor) {
+        return null;
     }
 }
