@@ -7,4 +7,8 @@ public class LoxReturn extends RuntimeException {
         super(null, null, false, false);
         this.value = value;
     }
+
+    public Object getValue() {
+        return value;
+    }
 }

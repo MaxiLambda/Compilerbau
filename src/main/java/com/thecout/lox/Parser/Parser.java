@@ -61,6 +61,7 @@ public class Parser {
         consume(LEFT_PAREN,"Expected '('");
         List<Stmt> returnStmts = new ArrayList<>();
         if(FirstTokens.VAR_DECL.containsTokenType(peek().type)){
+            consume(VAR,"Expected 'var'");
             returnStmts.add(varDeclaration());
         }else if(FirstTokens.EXPR_STATEMENT.containsTokenType(peek().type)){
             returnStmts.add(expressionStatement());

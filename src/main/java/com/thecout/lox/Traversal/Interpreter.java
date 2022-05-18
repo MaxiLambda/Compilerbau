@@ -140,7 +140,7 @@ public class Interpreter implements ExprVisitor<Object>,
 
     @Override
     public Object visitVariableExpr(Variable expr) {
-        return null;
+        return environment.get(expr.name);
     }
 
     @Override
@@ -191,6 +191,9 @@ public class Interpreter implements ExprVisitor<Object>,
 
     @Override
     public Void visitWhileStmt(While stmt) {
+        while ((boolean) evaluate(stmt.condition)){
+            execute(stmt.body);
+        }
         return null;
     }
 
