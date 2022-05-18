@@ -30,6 +30,7 @@ public class ParserTest {
         assertTrue(statements.get(1) instanceof Print, "Expected Type Print got " + actual.get(0).getClass().getName());
         assertTrue(((Function) statements.get(0)).body.get(0) instanceof Print, "Expected Type Print in function");
         assertEquals(((Function) statements.get(0)).parameters.get(0).type, TokenType.IDENTIFIER, "Expected first function parameter to be identifier");
-
+        System.out.println();
+        statements.forEach(System.out::println);
     }
 }
