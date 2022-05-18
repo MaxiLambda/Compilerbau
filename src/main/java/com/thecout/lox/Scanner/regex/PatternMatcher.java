@@ -27,7 +27,7 @@ public class PatternMatcher {
     }
 
     PatternMatcher(String regex, TokenType type){
-        p = Pattern.compile("^(" + regex + ")\\s*(.*)");
+        p = Pattern.compile("^\\s*(" + regex + ")\\s*(.*)");
         this.type = type;
     }
 

@@ -1,9 +1,42 @@
 package com.thecout.lox.Traversal;
 
 import com.thecout.lox.Parser.Expr.*;
+import com.thecout.lox.Parser.Parser;
 import com.thecout.lox.Parser.Stmts.*;
+import com.thecout.lox.Scanner.Scanner;
+import com.thecout.lox.Scanner.Token;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AstPrinter implements ExprVisitor<String>, StmtVisitor<String> {
+
+    public static void main(String[] args) {
+        final String looptest2 = """
+                fun printSum(a,d) {
+                    for(var i = 0; a < d; i = i+1){
+                        a = a+1;
+                    }
+                    return a;
+                }
+                print printSum(2,5);
+                            
+                """;
+
+
+        Scanner scanner = new Scanner(looptest2);
+        List<Token> actual = scanner.scan();
+        Parser parser = new Parser(actual);
+        AstPrinter interpreter = new AstPrinter();
+        List<Stmt> statements = parser.parse();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        statements.stream().map(interpreter::print).forEach(System.out::println);
+
+    }
+
+
     public String print(Expr expr) {
         return expr.accept(this);
     }
@@ -15,81 +48,84 @@ public class AstPrinter implements ExprVisitor<String>, StmtVisitor<String> {
 
     @Override
     public String visitAssignExpr(Assign expr) {
-        return null;
+        return "Assign: %s to var %s\n".formatted(print(expr.value),expr.name.lexeme);
     }
 
     @Override
     public String visitBinaryExpr(Binary expr) {
-        return null;
+        return "BinaryExpr: %s %s %s\n".formatted(print(expr.left),expr.operator.lexeme,print(expr.right));
     }
 
     @Override
     public String visitCallExpr(Call expr) {
-        return null;
+        return "Call: %s with arguments %s\n".formatted(print(expr.callee),expr.arguments.stream().map(this::print).collect(Collectors.joining(", ")));
     }
 
     @Override
     public String visitGroupingExpr(Grouping expr) {
-        return null;
+        return "Grouping: %s\n".formatted(print(expr));
     }
 
     @Override
     public String visitLiteralExpr(Literal expr) {
-        return null;
+        return "Literal: %s\n".formatted(expr.value);
     }
 
     @Override
     public String visitLogicalExpr(Logical expr) {
-        return null;
+        return "LogicalExpr: %s %s %s\n".formatted(print(expr.left),expr.operator.lexeme,print(expr.right));
+
     }
 
     @Override
     public String visitUnaryExpr(Unary expr) {
-        return null;
+        return "UnaryExpr: %s %s\n".formatted(expr.operator.lexeme,print(expr.right));
+
     }
 
     @Override
     public String visitVariableExpr(Variable expr) {
-        return null;
+        return "Variable: %s\n".formatted(expr.name);
     }
 
     @Override
     public String visitBlockStmt(Block stmt) {
-        return null;
+        return "Block: %s END-BLOCK\n".formatted(stmt.statements.stream().map(this::print).collect(Collectors.joining(", ")));
     }
 
     @Override
     public String visitExpressionStmt(Expression stmt) {
-        return null;
+        return "Expression: %s\n".formatted(print(stmt.expression));
     }
 
     @Override
     public String visitFunctionStmt(Function stmt) {
-        return null;
+        return "Function: %s %s %s END-Function\n".formatted(stmt.name,
+                stmt.parameters.stream().map(Token::toString).collect(Collectors.joining(", ")), stmt.body.stream().map(this::print).collect(Collectors.joining(", ")));
     }
 
     @Override
     public String visitIfStmt(If stmt) {
-        return null;
+        return "If: %s then %s else %s\n".formatted(print(stmt.condition),print(stmt.thenBranch),print(stmt.elseBranch));
     }
 
     @Override
     public String visitPrintStmt(Print stmt) {
-        return null;
+        return "Print: %s\n".formatted(print(stmt.expression));
     }
 
     @Override
     public String visitReturnStmt(Return stmt) {
-        return null;
+        return "Return: %s\n".formatted(print(stmt.value));
     }
 
     @Override
     public String visitVarStmt(Var stmt) {
-        return null;
+        return "Var: %s %s\n".formatted(stmt.name.toString(),print(stmt.initializer));
     }
 
     @Override
     public String visitWhileStmt(While stmt) {
-        return null;
+        return "While: %s %s\n".formatted(print(stmt.condition),print(stmt.body));
     }
 }
