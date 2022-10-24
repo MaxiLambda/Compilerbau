@@ -12,8 +12,6 @@ import static com.thecout.lox.Scanner.TokenType.EOF;
 
 public class Scanner {
 
-
-
     private final String source;
     private final List<Token> tokens = new ArrayList<>();
     private final TokenManager tokenManager = new TokenManager();

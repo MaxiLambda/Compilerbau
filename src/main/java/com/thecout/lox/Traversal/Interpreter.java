@@ -14,8 +14,6 @@ public class Interpreter implements ExprVisitor<Object>,
     private Environment environment = globals;
 
 
-
-
     public Interpreter() {
         globals.define("clock", new LoxCallable() {
             @Override
